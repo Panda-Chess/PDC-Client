@@ -7,44 +7,23 @@ on:
 
 jobs:
   build:
+    permissions:
+      packages: write
+      contents: write
+      pull-requests: write
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - name: Create NPMRC
         run: |
             echo "//npm.pkg.github.com/:_authToken=${{ secrets.SECRET_TOKEN }}" >> ~/.npmrc
             echo "@panda-chess:registry=https://npm.pkg.github.com" >> ~/.npmrc
-            cat ~/.npmrc
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20.7.0
-      - run: npm install 
-      - run: yarn lint
-      - run: yarn test
-
-  publish-gpr:
-    permissions:
-      packages: write
-      contents: write
-      pull-requests: write
-      issues: write
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create NPMRC
-        run: |
-            echo "//npm.pkg.github.com/:_authToken=${{ secrets.SECRET_TOKEN }}" >> ~/.npmrc
-            echo "@you-scope:registry=https://npm.pkg.github.com" >> ~/.npmrc
-            echo 'registry "https://registry.yarnpkg.com"' >> ~/.yarnrc
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 20.7.0
           registry-url: https://npm.pkg.github.com/
-      - run: npm install
-      - run: yarn build
+      - run: yarn install 
+      - run: yarn lint
+      - run: yarn test
       - run: yarn semantic-release
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN }}
-          
