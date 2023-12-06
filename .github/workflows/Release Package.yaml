@@ -7,16 +7,11 @@ on:
 
 jobs:
   build:
-    permissions:
-      packages: read
-      contents: read
-      pull-requests: write
-      issues: write
     runs-on: ubuntu-latest
     steps:
       - name: Create NPMRC
         run: |
-            echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+            echo "//npm.pkg.github.com/:_authToken=${{ secrets.SECRET_TOKEN }}" >> ~/.npmrc
             echo "@panda-chess:registry=https://npm.pkg.github.com" >> ~/.npmrc
             cat ~/.npmrc
       - uses: actions/checkout@v4
@@ -29,8 +24,8 @@ jobs:
 
   publish-gpr:
     permissions:
-      packages: read
-      contents: read
+      packages: write
+      contents: write
       pull-requests: write
       issues: write
     needs: build
@@ -38,7 +33,7 @@ jobs:
     steps:
       - name: Create NPMRC
         run: |
-            echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+            echo "//npm.pkg.github.com/:_authToken=${{ secrets.SECRET_TOKEN }}" >> ~/.npmrc
             echo "@you-scope:registry=https://npm.pkg.github.com" >> ~/.npmrc
             echo 'registry "https://registry.yarnpkg.com"' >> ~/.yarnrc
       - uses: actions/checkout@v4
