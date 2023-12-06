@@ -8,8 +8,8 @@ on:
 jobs:
   build:
     permissions:
-      packages: read/write
-      contents: read/write
+      packages: read
+      contents: read
       pull-requests: write
       issues: write
     runs-on: ubuntu-latest
@@ -29,8 +29,8 @@ jobs:
 
   publish-gpr:
     permissions:
-      packages: read/write
-      contents: read/write
+      packages: read
+      contents: read
       pull-requests: write
       issues: write
     needs: build
