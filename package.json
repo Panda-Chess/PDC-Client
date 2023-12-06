@@ -1,0 +1,43 @@
+{
+  "name": "@panda-chess/pdc-client",
+  "private": true,
+  "version": "v0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "@Panda-Chess:registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Panda-Chess/PDC-Core"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "push": "yarn lint && git add . && git-cz && git pull && git push",
+    "lint": "eslint ./src/ --ext .ts --fix",
+    "preview": "vite preview",
+    "test": "exit 0"
+  },
+  "dependencies": {
+    "@panda-chess/pdc-core": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.0.6",
+    "git-cz": "^4.9.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
