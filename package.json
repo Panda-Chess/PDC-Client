@@ -16,6 +16,7 @@
     "build": "tsc && vite build",
     "push": "yarn lint && git add . && git-cz && git pull && git push",
     "lint": "eslint ./src/ --ext .ts --fix",
+    "semantic-release": "semantic-release",
     "preview": "vite preview",
     "test": "exit 0"
   },
