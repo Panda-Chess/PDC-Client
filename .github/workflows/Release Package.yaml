@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     permissions:
-      packages: write
+      packages: read
       contents: write
       pull-requests: write
       issues: write
@@ -23,13 +23,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20.7.0
-      - run: yarn --frozen-lockfile --check-files 
+      - run: yarn install 
       - run: yarn lint
       - run: yarn test
 
   publish-gpr:
     permissions:
-      packages: write
+      packages: read
       contents: write
       pull-requests: write
       issues: write
@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: 20.7.0
           registry-url: https://npm.pkg.github.com/
-      - run: yarn --frozen-lockfile --check-files
+      - run: yarn install
       - run: yarn build
       - run: yarn semantic-release
         env:
