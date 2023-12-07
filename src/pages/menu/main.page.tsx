@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const Main = () => {
+export const MainPage = () => {
     return (
         <div>
             <h1>Main</h1>

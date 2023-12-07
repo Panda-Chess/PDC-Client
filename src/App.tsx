@@ -1,12 +1,12 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { Layout } from "./pages/layout";
-import { MenuLayout } from "./pages/menu/menuLayout";
-import { Game } from "./pages/game";
-import { Main } from "./pages/menu/main";
-import { Login } from "./pages/menu/login";
-import { Register } from "./pages/menu/register";
-import { Play } from "./pages/menu/play";
-import { TopPlayers } from "./pages/menu/topPlayers";
+import { MenuLayout } from "./pages/menu/menu.layout";
+import { GamePage } from "./pages/game.page";
+import { MainPage } from "./pages/menu/main.page";
+import { LoginPage } from "./pages/menu/login.page";
+import { RegisterPage } from "./pages/menu/register.page";
+import { PlayPage } from "./pages/menu/play.page";
+import { TopPlayersPage } from "./pages/menu/topPlayers.page";
 
 function App() {
     return (
@@ -14,13 +14,13 @@ function App() {
             <Routes>
                 <Route path="/" element={<Layout/>}>
                     <Route path="/" element={<MenuLayout/>}>
-                        <Route path="/" element={<Main/>}/>
-                        <Route path="login" element={<Login/>}/>
-                        <Route path="register" element={<Register/>}/>
-                        <Route path="play" element={<Play/>}/>
-                        <Route path="top-players" element={<TopPlayers/>}/>
+                        <Route path="/" element={<MainPage/>}/>
+                        <Route path="login" element={<LoginPage/>}/>
+                        <Route path="register" element={<RegisterPage/>}/>
+                        <Route path="play" element={<PlayPage/>}/>
+                        <Route path="top-players" element={<TopPlayersPage/>}/>
                     </Route>
-                    <Route path="game/:gameType" element={<Game/>}/>
+                    <Route path="game/:gameType" element={<GamePage/>}/>
                 </Route>
                 <Route path="*" element={<div>Not Found</div>}/>
             </Routes>

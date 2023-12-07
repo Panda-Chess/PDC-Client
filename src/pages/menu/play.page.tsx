@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { GameButton } from "../../models/gameButton";
 import { GameTypes } from "../../models/gameTypes";
 
-export const Play = () => {
+export const PlayPage = () => {
     const buttons: GameButton[] = [
         { label: "Vs AI", gameType: GameTypes.AI },
         { label: "Casual Offline", gameType: GameTypes.CASUAL_OFFLINE },
