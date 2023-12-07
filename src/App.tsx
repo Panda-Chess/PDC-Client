@@ -1,20 +1,30 @@
-import { Piece, generatePieceSet } from "@panda-chess/pdc-core";
-import { useEffect, useState } from "react";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { Layout } from "./pages/layout";
+import { MenuLayout } from "./pages/menu/menuLayout";
+import { Game } from "./pages/game";
+import { Main } from "./pages/menu/main";
+import { Login } from "./pages/menu/login";
+import { Register } from "./pages/menu/register";
+import { Play } from "./pages/menu/play";
+import { TopPlayers } from "./pages/menu/topPlayers";
 
 function App() {
-    const [pieces, setPieces ] = useState<Piece[]>();
-
-    useEffect(() => {
-        setPieces(generatePieceSet());
-    }, []);
-
     return (
-        <>
-            <p>test</p>
-            {pieces && pieces.map((piece, idx) => {
-                return <p key={idx}>{piece.color} {piece.pieceType} - {piece.position.x} {piece.position.y}</p>;
-            })}
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={<MenuLayout/>}>
+                        <Route path="/" element={<Main/>}/>
+                        <Route path="login" element={<Login/>}/>
+                        <Route path="register" element={<Register/>}/>
+                        <Route path="play" element={<Play/>}/>
+                        <Route path="top-players" element={<TopPlayers/>}/>
+                    </Route>
+                    <Route path="game/:gameType" element={<Game/>}/>
+                </Route>
+                <Route path="*" element={<div>Not Found</div>}/>
+            </Routes>
+        </BrowserRouter>
     );
 }
 
