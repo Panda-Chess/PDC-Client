@@ -1,8 +1,6 @@
 {
   "name": "@panda-chess/pdc-client",
-  "private": true,
   "version": "v0.0.1",
-  "type": "module",
   "main": "dist/index.js",
   "publishConfig": {
     "@Panda-Chess:registry": "https://npm.pkg.github.com"
