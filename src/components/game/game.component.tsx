@@ -1,18 +1,7 @@
-import { useEffect } from "react";
+import { GameTable } from "./gameTable.component";
 
-type GameProps = {
-    gameMode: () => void;
-};
-
-export const Game = (props: GameProps) => {
-
-    useEffect(() => {
-        props.gameMode();
-    }, []);
-
+export const Game = () => {
     return (
-        <div>
-            <h1>Game</h1>
-        </div>
+        <GameTable />
     );
 };
