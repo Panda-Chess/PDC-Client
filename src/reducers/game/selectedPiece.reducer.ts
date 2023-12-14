@@ -2,19 +2,23 @@ import { Piece } from "@panda-chess/pdc-core";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-const initialState: any = null;
+type SelectedPieceState = {
+    piece: Piece | null
+};
+
+const initialState: SelectedPieceState = {piece: null};
 
 export const selectedPieceSlice = createSlice({
     name: "selectedPiece",
     initialState,
     reducers: {
-        setSelectedPiece: (_state: Piece | null, action: PayloadAction<Piece | null>): Piece | null => {
-            return action.payload;
+        setSelectedPiece: (state, action: PayloadAction<Piece | null>) => {
+            state.piece =  action.payload;
         }
     }
 });
 
 export const { setSelectedPiece } = selectedPieceSlice.actions;
-export const selectedPieceSelector = (state: RootState): Piece => state.game.selectedPiece;
+export const selectedPieceSelector = (state: RootState) => state.game.selectedPiece.piece;
 
 export default selectedPieceSlice.reducer;
