@@ -21,7 +21,7 @@ export const TablePiece = (props: TablePieceProps) => {
 
     return(
         <Box onClick={handlePieceSelect} sx={{width: "100%", height: "100%", backgroundColor: selectedPiece?.pieceId === props.piece.pieceId? "red": ""}}>
-            {props.piece.pieceType} {props.piece.color}
+            <img style={{width: "100%", height: "100%"}} src={`/${props.piece.color}_${props.piece.pieceType.toLocaleLowerCase()}.png`} />
         </Box>
     );
 };
