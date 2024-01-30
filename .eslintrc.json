@@ -16,7 +16,6 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "no-undef": "off",
-    "@typescript-eslint/no-explicit-any": "off",
     "object-curly-newline": [
       "error",
       {
