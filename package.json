@@ -10,7 +10,7 @@
     "url": "https://github.com/Panda-Chess/PDC-Client"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "tsc && vite build",
     "push": "yarn lint && git add . && git-cz && git pull && git push",
     "lint": "eslint ./src/ --ext .tsx --ext .ts --fix",
