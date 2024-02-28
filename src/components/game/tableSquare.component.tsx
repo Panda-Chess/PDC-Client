@@ -1,10 +1,9 @@
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
-import { piecesSelector, setPieces } from "../../reducers/game/pieces.reducer";
+import { movePiece, piecesSelector } from "../../reducers/game/pieces.reducer";
 import { TablePiece } from "./tablePiece.component";
-import { selectableSquareSelector } from "../../reducers/game/selectableSquares.reducer";
+import { selectableMoveSelector } from "../../reducers/game/selectableMove.reducer";
 import { useAppDispatch } from "../../hooks/useRedux";
-import { selectedPieceSelector } from "../../reducers/game/selectedPiece.reducer";
 
 type TableSquareProps = {
     x: number;
@@ -16,20 +15,16 @@ export const TableSquare = (props: TableSquareProps) => {
 
     const pieces = useSelector(piecesSelector);
     const currentPiece = pieces.find(piece => piece.position.x == props.x && piece.position.y == props.y);
-    const selectedPiece = useSelector(selectedPieceSelector);
-    const isSelectableSquare = !!useSelector(selectableSquareSelector).find(x=>x.x === props.x && x.y === props.y);
+    const selectableMove = useSelector(selectableMoveSelector).find(x=>
+        x.to.position.x === props.x && x.to.position.y === props.y);
 
     const handleSquareSelect = () => {
-        dispatch(setPieces(pieces.map((piece)=>{
-            if(selectedPiece?.pieceId === piece.pieceId)
-                return {...piece, position: {x: props.x, y: props.y}};
-            
-            return piece;
-        })));
+        if(selectableMove)
+            dispatch(movePiece(selectableMove));
     };
 
     return (
-        <Box onClick={handleSquareSelect} sx={{width: `${100/8}%`, backgroundColor: isSelectableSquare? "green": (props.x+props.y)%2 == 0? "white": "black"}}>
+        <Box onClick={handleSquareSelect} sx={{width: `${100/8}%`, backgroundColor: selectableMove? "green": (props.x+props.y)%2 == 0? "white": "black"}}>
             {currentPiece && (
                 <TablePiece piece={currentPiece}/>
             )}

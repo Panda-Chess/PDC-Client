@@ -3,9 +3,9 @@ import { piecesSelector } from "../../reducers/game/pieces.reducer";
 import { useEffect } from "react";
 import { selectablePiecesSelector, setSelectablePieces } from "../../reducers/game/selectablePieces.reducer";
 import { useAppDispatch } from "../useRedux";
-import { setSelectableSquare } from "../../reducers/game/selectableSquares.reducer";
+import { setSelectableMove } from "../../reducers/game/selectableMove.reducer";
 import { selectedPieceSelector } from "../../reducers/game/selectedPiece.reducer";
-import { getMoves } from "@panda-chess/pdc-core";
+import { getMoves, checkGameState, GameStates } from "@panda-chess/pdc-core";
 
 export const useAIGame = () => {
     const dispatch = useAppDispatch();
@@ -24,11 +24,21 @@ export const useAIGame = () => {
             return;
         }
 
-        dispatch(setSelectablePieces(pieces.filter(piece => piece.color !== selectablePieces[0].color)));
+        const gameState = checkGameState(pieces);
+        if(gameState !== GameStates.InProgress){
+            alert(gameState);
+            dispatch(setSelectablePieces([]));
+        } else {
+            dispatch(setSelectablePieces(pieces.filter(piece => piece.color !== selectablePieces[0].color)));
+        }
+
+
     }, [pieces]);
 
     useEffect(() => {
-        if(selectedPiece)
-            dispatch(setSelectableSquare(getMoves(selectedPiece, pieces).map(e=>e.to.position)));
+        if(selectedPiece){
+            const moves = getMoves(selectedPiece, pieces);
+            dispatch(setSelectableMove(moves));
+        }
     }, [selectedPiece]);
 };
