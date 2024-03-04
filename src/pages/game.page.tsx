@@ -5,13 +5,14 @@ import { useAIGame } from "../hooks/game/useAIGame";
 import { useCasualOfflineGame } from "../hooks/game/useCasualOfflineGame";
 import { useCasualOnlineGame } from "../hooks/game/useCasualOnlineGame";
 import { useCompetitiveGame } from "../hooks/game/useCompetitiveGame";
+import { randomAlgo } from "@panda-chess/pdc-ai";
 
 export const GamePage = () => {
     const gameType = useParams().gameType;
 
     switch (gameType) {
     case GameTypes.AI:
-        useAIGame();
+        useAIGame({algo: randomAlgo});
         break;
     case GameTypes.CASUAL_OFFLINE:
         useCasualOfflineGame();

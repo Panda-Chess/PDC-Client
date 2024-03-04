@@ -1,17 +1,26 @@
-import { useSelector } from "react-redux";
-import { piecesSelector } from "../../reducers/game/pieces.reducer";
 import { useEffect } from "react";
+import { piecesSelector, setPieces } from "../../reducers/game/pieces.reducer";
 import { selectablePiecesSelector, setSelectablePieces } from "../../reducers/game/selectablePieces.reducer";
-import { useAppDispatch } from "../useRedux";
-import { setSelectableMove } from "../../reducers/game/selectableMove.reducer";
 import { selectedPieceSelector } from "../../reducers/game/selectedPiece.reducer";
-import { getMoves, checkGameState, GameStates } from "@panda-chess/pdc-core";
+import { useAppDispatch, useAppSelector } from "../useRedux";
+import { 
+    GameStates, 
+    checkGameState, 
+    getMoves, 
+    makeMove 
+} from "@panda-chess/pdc-core";
+import { setSelectableMove } from "../../reducers/game/selectableMove.reducer";
+import { GenericAlgorithm, getBestMove } from "@panda-chess/pdc-ai";
 
-export const useAIGame = () => {
+type AIGameProp = {
+    algo: GenericAlgorithm;
+}
+
+export const useAIGame = (prop: AIGameProp) => {
     const dispatch = useAppDispatch();
-    const pieces = useSelector(piecesSelector);
-    const selectablePieces = useSelector(selectablePiecesSelector);
-    const selectedPiece = useSelector(selectedPieceSelector);
+    const pieces = useAppSelector(piecesSelector);
+    const selectablePieces = useAppSelector(selectablePiecesSelector);
+    const selectedPiece = useAppSelector(selectedPieceSelector);
 
     useEffect(() => {
         if (selectablePieces.length === 0) {
@@ -19,19 +28,32 @@ export const useAIGame = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if (selectablePieces.length === 0) {
-            return;
-        }
+    const aiMoves = () => {
+        const bestMove = getBestMove(pieces, "black", prop.algo);
+        dispatch(setPieces(makeMove(bestMove, pieces)));
 
+        dispatch(setSelectablePieces([]));
+        dispatch(setSelectableMove([]));
+    };
+
+    const playerMoves = () => {
+        const currentSelectablePieces = pieces.filter(piece => piece.color === "white");
+        dispatch(setSelectablePieces(currentSelectablePieces));
+    };
+
+    useEffect(() => {
         const gameState = checkGameState(pieces);
         if(gameState !== GameStates.InProgress){
             alert(gameState);
             dispatch(setSelectablePieces([]));
         } else {
-            dispatch(setSelectablePieces(pieces.filter(piece => piece.color !== selectablePieces[0].color)));
+            if(selectablePieces.length !== 0){
+                aiMoves();
+            }
+            else{
+                playerMoves();
+            }
         }
-
 
     }, [pieces]);
 
