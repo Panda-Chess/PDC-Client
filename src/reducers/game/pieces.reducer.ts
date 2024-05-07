@@ -1,10 +1,11 @@
 import {
-    Move, Piece, generatePieceSet, makeMove 
+    Move, Piece, checkGameState, generatePieceSet, makeMove 
 } from "@panda-chess/pdc-core";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
 import { setSelectedPiece } from "./selectedPiece.reducer";
 import { setSelectableMove } from "./selectableMove.reducer";
+import { setCurrentColor } from "../player/currentColor.reducer";
 
 const initialState: Piece[] = generatePieceSet();
 
@@ -20,16 +21,18 @@ export const piecesSlice = createSlice({
 
 export const movePiece = (move: Move) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const isSelectableSquare = state.game.selectableSquare.find(
-        x=>x.to.position.x === move.to.position.x && x.to.position.y === move.to.position.y);
+    const pieces = makeMove(move, state.game.pieces);
 
-    if(state.game.selectedPiece && isSelectableSquare){
-        const pieces = makeMove(move, state.game.pieces);
+    dispatch(setPieces(pieces));
 
-        dispatch(setPieces(pieces));
+    dispatch(setSelectedPiece(null));
+    dispatch(setSelectableMove([]));
+    dispatch(setCurrentColor(state.player.currentColor === "white" ? "black" : "white"));
 
-        dispatch(setSelectedPiece(null));
-        dispatch(setSelectableMove([]));
+    const gameState = checkGameState(pieces);
+
+    if(gameState !== "InProgress"){
+        alert(gameState);
     }
 };
 

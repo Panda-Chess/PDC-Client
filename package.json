@@ -22,12 +22,13 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.20",
-    "@panda-chess/pdc-core": "latest",
     "@panda-chess/pdc-ai": "latest",
+    "@panda-chess/pdc-core": "^0.5.7",
     "@reduxjs/toolkit": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^9.0.2"
+    "react-redux": "^9.0.2",
+    "socket.io-client": "^4.7.4"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",

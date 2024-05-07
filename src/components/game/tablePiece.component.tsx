@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
-import { Piece } from "@panda-chess/pdc-core";
+import { Piece, checkGameState } from "@panda-chess/pdc-core";
 import { useAppDispatch } from "../../hooks/useRedux";
 import { selectedPieceSelector, setSelectedPiece } from "../../reducers/game/selectedPiece.reducer";
 import { useSelector } from "react-redux";
-import { selectablePiecesSelector } from "../../reducers/game/selectablePieces.reducer";
+import { currentColorSelector } from "../../reducers/player/currentColor.reducer";
+import { playersSelector } from "../../reducers/player/players.reducer";
+import { piecesSelector } from "../../reducers/game/pieces.reducer";
 
 type TablePieceProps = {
     piece: Piece;
@@ -11,12 +13,22 @@ type TablePieceProps = {
 
 export const TablePiece = (props: TablePieceProps) => {
     const dispatch = useAppDispatch();
+    const currentColor = useSelector(currentColorSelector);
     const selectedPiece = useSelector(selectedPieceSelector);
-    const selectablePieces = useSelector(selectablePiecesSelector);
+    const players = useSelector(playersSelector);
+    const pieces = useSelector(piecesSelector);
 
     const handlePieceSelect = () => {
-        if(selectablePieces.find(piece => piece.pieceId === props.piece.pieceId))
-            dispatch(setSelectedPiece(props.piece));
+        if(checkGameState(pieces) !== "InProgress")
+            return;
+
+        if(players.current?.color !== currentColor)
+            return;
+
+        if(players.current?.color !== props.piece.color)
+            return;
+
+        dispatch(setSelectedPiece(props.piece));
     };
 
     return(

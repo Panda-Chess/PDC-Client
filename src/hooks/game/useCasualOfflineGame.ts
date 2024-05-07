@@ -1,38 +1,27 @@
 import { useEffect } from "react";
-import { piecesSelector } from "../../reducers/game/pieces.reducer";
-import { selectablePiecesSelector, setSelectablePieces } from "../../reducers/game/selectablePieces.reducer";
+import { movePiece, piecesSelector } from "../../reducers/game/pieces.reducer";
 import { selectedPieceSelector } from "../../reducers/game/selectedPiece.reducer";
 import { useAppDispatch, useAppSelector } from "../useRedux";
-import { GameStates, checkGameState, getMoves } from "@panda-chess/pdc-core";
+import { Move, getMoves } from "@panda-chess/pdc-core";
 import { setSelectableMove } from "../../reducers/game/selectableMove.reducer";
+import { GameHookType } from "./game-hook-type";
+import { setCurrentColor } from "../../reducers/player/currentColor.reducer";
+import { playersSelector, setPlayers } from "../../reducers/player/players.reducer";
 
-export const useCasualOfflineGame = () => {
+export const useCasualOfflineGame: GameHookType = () => {
     const dispatch = useAppDispatch();
     const pieces = useAppSelector(piecesSelector);
-    const selectablePieces = useAppSelector(selectablePiecesSelector);
     const selectedPiece = useAppSelector(selectedPieceSelector);
+    const players = useAppSelector(playersSelector);
 
     useEffect(() => {
-        if (selectablePieces.length === 0) {
-            dispatch(setSelectablePieces(pieces.filter(piece => piece.color === "white")));
-        }
+        dispatch(setCurrentColor("white"));
+
+        dispatch(setPlayers({
+            current: {color: "white", name: "Player 1"},
+            opponent: {color: "black", name: "Player 2"}
+        }));
     }, []);
-
-    useEffect(() => {
-        if (selectablePieces.length === 0) {
-            return;
-        }
-
-        const gameState = checkGameState(pieces);
-        if(gameState !== GameStates.InProgress){
-            alert(gameState);
-            dispatch(setSelectablePieces([]));
-        } else {
-            dispatch(setSelectablePieces(pieces.filter(piece => piece.color !== selectablePieces[0].color)));
-        }
-
-
-    }, [pieces]);
 
     useEffect(() => {
         if(selectedPiece){
@@ -40,4 +29,17 @@ export const useCasualOfflineGame = () => {
             dispatch(setSelectableMove(moves));
         }
     }, [selectedPiece]);
+
+    const handleMove = (move: Move) => {
+        dispatch(movePiece(move));
+        
+        dispatch(setPlayers({
+            current: players.opponent,
+            opponent: players.current
+        }));
+    };
+
+    return {
+        handleMove
+    };
 };

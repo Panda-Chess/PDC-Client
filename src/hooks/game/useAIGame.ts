@@ -1,61 +1,31 @@
 import { useEffect } from "react";
-import { piecesSelector, setPieces } from "../../reducers/game/pieces.reducer";
-import { selectablePiecesSelector, setSelectablePieces } from "../../reducers/game/selectablePieces.reducer";
+import { movePiece, piecesSelector } from "../../reducers/game/pieces.reducer";
 import { selectedPieceSelector } from "../../reducers/game/selectedPiece.reducer";
 import { useAppDispatch, useAppSelector } from "../useRedux";
 import { 
-    GameStates, 
-    checkGameState, 
+    Move, 
     getMoves, 
-    makeMove 
 } from "@panda-chess/pdc-core";
 import { setSelectableMove } from "../../reducers/game/selectableMove.reducer";
-import { GenericAlgorithm, getBestMove } from "@panda-chess/pdc-ai";
+import { getBestMove, randomAlgo } from "@panda-chess/pdc-ai";
+import { GameHookType } from "./game-hook-type";
+import { currentColorSelector, setCurrentColor } from "../../reducers/player/currentColor.reducer";
+import { setPlayers } from "../../reducers/player/players.reducer";
 
-type AIGameProp = {
-    algo: GenericAlgorithm;
-}
-
-export const useAIGame = (prop: AIGameProp) => {
+export const useAIGame: GameHookType = (prop = {algo: randomAlgo}) => {
     const dispatch = useAppDispatch();
     const pieces = useAppSelector(piecesSelector);
-    const selectablePieces = useAppSelector(selectablePiecesSelector);
     const selectedPiece = useAppSelector(selectedPieceSelector);
+    const currentColor = useAppSelector(currentColorSelector);
 
     useEffect(() => {
-        if (selectablePieces.length === 0) {
-            dispatch(setSelectablePieces(pieces.filter(piece => piece.color === "white")));
-        }
+        dispatch(setCurrentColor("white"));
+
+        dispatch(setPlayers({
+            current: {color: "white", name: "Player 1"},
+            opponent: {color: "black", name: "AI"}
+        }));
     }, []);
-
-    const aiMoves = () => {
-        const bestMove = getBestMove(pieces, "black", prop.algo);
-        dispatch(setPieces(makeMove(bestMove, pieces)));
-
-        dispatch(setSelectablePieces([]));
-        dispatch(setSelectableMove([]));
-    };
-
-    const playerMoves = () => {
-        const currentSelectablePieces = pieces.filter(piece => piece.color === "white");
-        dispatch(setSelectablePieces(currentSelectablePieces));
-    };
-
-    useEffect(() => {
-        const gameState = checkGameState(pieces);
-        if(gameState !== GameStates.InProgress){
-            alert(gameState);
-            dispatch(setSelectablePieces([]));
-        } else {
-            if(selectablePieces.length !== 0){
-                aiMoves();
-            }
-            else{
-                playerMoves();
-            }
-        }
-
-    }, [pieces]);
 
     useEffect(() => {
         if(selectedPiece){
@@ -63,4 +33,19 @@ export const useAIGame = (prop: AIGameProp) => {
             dispatch(setSelectableMove(moves));
         }
     }, [selectedPiece]);
+
+    const handleMove = (move: Move) => {
+        dispatch(movePiece(move));
+    };
+
+    useEffect(() => {
+        if(currentColor === "black"){
+            const bestMove = getBestMove(pieces, "black", prop.algo);
+            dispatch(movePiece(bestMove));
+        }
+    }, [pieces]);
+
+    return {
+        handleMove
+    };
 };

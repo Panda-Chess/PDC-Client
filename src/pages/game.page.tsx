@@ -5,29 +5,31 @@ import { useAIGame } from "../hooks/game/useAIGame";
 import { useCasualOfflineGame } from "../hooks/game/useCasualOfflineGame";
 import { useCasualOnlineGame } from "../hooks/game/useCasualOnlineGame";
 import { useCompetitiveGame } from "../hooks/game/useCompetitiveGame";
-import { randomAlgo } from "@panda-chess/pdc-ai";
+import { minmaxAlgo } from "@panda-chess/pdc-ai";
+import { ExportType } from "../hooks/game/game-hook-type";
 
 export const GamePage = () => {
     const gameType = useParams().gameType;
+    let gameTypeMove: ExportType;
 
     switch (gameType) {
     case GameTypes.AI:
-        useAIGame({algo: randomAlgo});
+        gameTypeMove = useAIGame({algo: minmaxAlgo});
         break;
     case GameTypes.CASUAL_OFFLINE:
-        useCasualOfflineGame();
+        gameTypeMove = useCasualOfflineGame();
         break;
     case GameTypes.CASUAL_ONLINE:
-        useCasualOnlineGame();
+        gameTypeMove = useCasualOnlineGame();
         break;
-    case GameTypes.COMPETITIVE:
-        useCompetitiveGame();
+    default:
+        gameTypeMove = useCompetitiveGame();
         break;
     }
 
     return (
         <div>
-            <Game />
+            <Game onMove={gameTypeMove.handleMove} />
         </div>
     );
 };

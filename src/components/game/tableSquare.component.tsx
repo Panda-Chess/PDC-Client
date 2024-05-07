@@ -1,18 +1,18 @@
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
-import { movePiece, piecesSelector } from "../../reducers/game/pieces.reducer";
+import { piecesSelector } from "../../reducers/game/pieces.reducer";
 import { TablePiece } from "./tablePiece.component";
 import { selectableMoveSelector } from "../../reducers/game/selectableMove.reducer";
-import { useAppDispatch } from "../../hooks/useRedux";
+import { Move } from "@panda-chess/pdc-core";
 
 type TableSquareProps = {
     x: number;
     y: number;
+
+    onMove: (move: Move) => void;
 };
 
 export const TableSquare = (props: TableSquareProps) => {
-    const dispatch = useAppDispatch();
-
     const pieces = useSelector(piecesSelector);
     const currentPiece = pieces.find(piece => piece.position.x == props.x && piece.position.y == props.y);
     const selectableMove = useSelector(selectableMoveSelector).find(x=>
@@ -20,7 +20,7 @@ export const TableSquare = (props: TableSquareProps) => {
 
     const handleSquareSelect = () => {
         if(selectableMove)
-            dispatch(movePiece(selectableMove));
+            props.onMove(selectableMove);
     };
 
     return (
