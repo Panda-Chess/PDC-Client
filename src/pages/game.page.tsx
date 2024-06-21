@@ -22,7 +22,7 @@ export const GamePage = () => {
             break;
         case GameTypes.CASUAL_OFFLINE:
             dispatch(gameManager.initialize(
-                CreateCasualOfflineSender(gameManager)
+                CreateCasualOfflineSender()
             ));
             dispatch(setModal(ModalTypes.casualPlayers));
             break;

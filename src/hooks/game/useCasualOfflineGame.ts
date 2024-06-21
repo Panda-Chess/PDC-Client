@@ -16,15 +16,10 @@ export const useCasualOfflineGame: GameHookType = () => {
 
     useEffect(() => {
         dispatch(setCurrentColor("white"));
-
-        dispatch(setPlayers({
-            current: {color: "white", name: "Player 1"},
-            opponent: {color: "black", name: "Player 2"}
-        }));
     }, []);
 
     useEffect(() => {
-        if(selectedPiece){
+        if (selectedPiece) {
             const moves = getMoves(selectedPiece, pieces);
             dispatch(setSelectableMove(moves));
         }
@@ -32,7 +27,7 @@ export const useCasualOfflineGame: GameHookType = () => {
 
     const handleMove = (move: Move) => {
         dispatch(movePiece(move));
-        
+
         dispatch(setPlayers({
             current: players.opponent,
             opponent: players.current
