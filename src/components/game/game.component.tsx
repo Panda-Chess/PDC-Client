@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { TableSquare } from "./tableSquare.component";
-import { Move } from "@panda-chess/pdc-core";
+import { Sender } from "../../reducers/sender.reducer";
 
 type GameProps = {
-    onMove: (move: Move) => void;
+    onMove: Sender;
 };
 
 export const Game = (props: GameProps) => {

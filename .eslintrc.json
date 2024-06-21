@@ -12,6 +12,7 @@
   "ignorePatterns": ["node_modules/", "dist/", "build/", "**/*test.ts"],
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
     "indent": ["error", 4],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],

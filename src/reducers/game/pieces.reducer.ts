@@ -1,5 +1,5 @@
 import {
-    Move, Piece, checkGameState, generatePieceSet, makeMove 
+    Move, Piece, checkGameState, generatePieceSet, makeMove
 } from "@panda-chess/pdc-core";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../store";
@@ -31,7 +31,7 @@ export const movePiece = (move: Move) => (dispatch: AppDispatch, getState: () =>
 
     const gameState = checkGameState(pieces);
 
-    if(gameState !== "InProgress"){
+    if (gameState !== "InProgress") {
         alert(gameState);
     }
 };

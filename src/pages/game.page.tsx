@@ -1,35 +1,43 @@
 import { useParams } from "react-router-dom";
 import { GameTypes } from "../models/gameTypes";
 import { Game } from "../components/game/game.component";
-import { useAIGame } from "../hooks/game/useAIGame";
-import { useCasualOfflineGame } from "../hooks/game/useCasualOfflineGame";
-import { useCasualOnlineGame } from "../hooks/game/useCasualOnlineGame";
-import { useCompetitiveGame } from "../hooks/game/useCompetitiveGame";
+import { CreateGameManager } from "../reducers/game/game-manager.reducer";
+import { CreateAISender, CreateCasualOfflineSender } from "../reducers/sender.reducer";
+import { useAppDispatch } from "../hooks/useRedux";
 import { minmaxAlgo } from "@panda-chess/pdc-ai";
-import { ExportType } from "../hooks/game/game-hook-type";
+import { ModalTypes, setModal } from "../reducers/modal.reducer";
+import { useEffect } from "react";
 
 export const GamePage = () => {
+    const gameManager = CreateGameManager();
+    const dispatch = useAppDispatch();
     const gameType = useParams().gameType;
-    let gameTypeMove: ExportType;
 
-    switch (gameType) {
-    case GameTypes.AI:
-        gameTypeMove = useAIGame({algo: minmaxAlgo});
-        break;
-    case GameTypes.CASUAL_OFFLINE:
-        gameTypeMove = useCasualOfflineGame();
-        break;
-    case GameTypes.CASUAL_ONLINE:
-        gameTypeMove = useCasualOnlineGame();
-        break;
-    default:
-        gameTypeMove = useCompetitiveGame();
-        break;
-    }
+    useEffect(() => {
+        switch (gameType) {
+        case GameTypes.AI:
+            dispatch(gameManager.initialize(
+                CreateAISender(gameManager, minmaxAlgo)
+            ));
+            break;
+        case GameTypes.CASUAL_OFFLINE:
+            dispatch(gameManager.initialize(
+                CreateCasualOfflineSender(gameManager)
+            ));
+            dispatch(setModal(ModalTypes.casualPlayers));
+            break;
+        case GameTypes.CASUAL_ONLINE:
+            // gameTypeMove = useCasualOnlineGame();
+            break;
+        default:
+            // gameTypeMove = useCompetitiveGame();
+            break;
+        }
+    }, []);
 
     return (
         <div>
-            <Game onMove={gameTypeMove.handleMove} />
+            <Game onMove={gameManager.sendMove} />
         </div>
     );
 };

@@ -9,8 +9,13 @@ import { PlayPage } from "./pages/menu/play.page";
 import { TopPlayersPage } from "./pages/menu/topPlayers.page";
 import { Provider } from "react-redux";
 import { store } from "./reducers/store";
+import axios from "axios";
+import settings from "./settings";
+import { Modals } from "./modals";
 
 function App() {
+    axios.defaults.baseURL = settings.appHost;
+
     return (
         <Provider store={store}>
             <BrowserRouter>
@@ -28,6 +33,7 @@ function App() {
                     <Route path="*" element={<div>Not Found</div>}/>
                 </Routes>
             </BrowserRouter>
+            <Modals/>
         </Provider>
     );
 }

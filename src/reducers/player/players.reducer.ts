@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { PlayerDTO } from "@panda-chess/pdc-core";
+import { User } from "@panda-chess/pdc-core";
 
 type PlayersInGame = {
-    current?: PlayerDTO;
-    opponent?: PlayerDTO;
+    current?: User;
+    opponent?: User;
 }
 
 const initialState: PlayersInGame = {};
